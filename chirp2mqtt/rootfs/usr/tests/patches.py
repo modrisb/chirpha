@@ -154,6 +154,10 @@ CODEC = [   # array of (no_of_sensors, "codec_code")
         1,  #
         'function getHaDeviceInfo() {return {device: {manufacturer: "vendor0",model: "model1",dev_euidev_eui0:{model:"model1a"}},entities: {counter:{entity_conf: {dev_euidev_eui0:{device_class:"water"}, expire_after: "{None}",device_class: "gas"}}}};}',
     ),
+    (   #22
+        1,  #
+        'function getHaDeviceInfo() {return {device: {manufacturer: "vendor0",model: "model1",},entities: {counter:{entity_conf: {value_template: "{{ value_json.object.counter }}",device_class: "gas001",state_class: "total_increasing",unit_of_measurement: "m³", enabled_by_default:false}},}};}',
+    ),
 
 ]
 

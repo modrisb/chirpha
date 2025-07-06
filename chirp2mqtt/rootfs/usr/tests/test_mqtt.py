@@ -7,7 +7,7 @@ from chirpha.const import BRIDGE_CONF_COUNT, CONF_APPLICATION_ID, WARMSG_DEVCLS_
 from tests import common
 
 from .patches import get_size, mqtt, set_size
-from tests.common import PAYLOAD_PRINT_CONFIGURATION_FILE
+from tests.common import PAYLOAD_PRINT_CONFIGURATION_FILE, REGULAR_CONFIGURATION_FILE
 
 def test_extended_debug_level(caplog):
     """Test run with extended debug enabled."""
@@ -102,6 +102,16 @@ def test_humidifier_dev_class(caplog):
         assert indexed_configs == 1
 
     common.chirp_setup_and_run_test(caplog, run_test_humidifier_dev_class, test_params=dict(devices=1, codec=15))
+
+def test_enabled_by_default(caplog):
+    """Test run with enabled_by_default flag in codec js.."""
+    def run_test_enabled_by_default(config):
+        messages = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2).get_published(keep_history=True)
+        print(messages)
+        enabled_configs = common.count_messages(r'/config$', '"enabled_by_default": false', keep_history=False)    # to be received as subscribed
+        assert enabled_configs == 1
+
+    common.chirp_setup_and_run_test(caplog, run_test_enabled_by_default, test_params=dict(devices=1, codec=22), conf_file=REGULAR_CONFIGURATION_FILE, allowed_msg_level=logging.WARNING)
 
 # to remove retained messages
 # mosquitto_pub -h ha -u loramqtt -P ploramqtt -t "application/72a56954-700f-4a52-90d2-86cf76df5c57/bridge/status"  -n -r -d

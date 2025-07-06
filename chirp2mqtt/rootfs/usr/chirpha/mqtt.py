@@ -817,7 +817,7 @@ class ChirpToHA:
                 discovery_config[key] = status_topic
             if "{dev_eui}" in value:
                 discovery_config[key] = value.replace( "{dev_eui}", dev_conf["dev_eui"] )
-        if not discovery_config.get("enabled_by_default"):
+        if discovery_config.get("enabled_by_default")==None:
             discovery_config["enabled_by_default"] = True
         if self._bridge_init_time:
             discovery_config["time_stamp"] = self._bridge_init_time

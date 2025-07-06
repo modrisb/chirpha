@@ -95,7 +95,7 @@ def chirp_setup_and_run_test(caplog, run_test_case, conf_file=REGULAR_CONFIGURAT
                         mqtt.Client(mqtt.CallbackAPIVersion.VERSION2).wait_empty_queue()
                         if bridge_online == 1: break
                         time.sleep(0.1)
-                    print("ooooooo ", no_ha_online, i, ha_online, 1 if not no_ha_online else 0, bridge_config, bridge_online, config_topics)
+                    #print("ooooooo ", no_ha_online, i, ha_online, 1 if not no_ha_online else 0, bridge_config, bridge_online, config_topics)
                     assert ha_online == (1 if not no_ha_online else 0)   # 1 message conditionally sent from test environment
                     assert bridge_config == BRIDGE_CONF_COUNT
                     assert bridge_online == 1
