@@ -1,4 +1,4 @@
-"""Test the ChirpStack LoRa integration execution with sending MQTT device messages."""
+"""Test the ChirpStack LoRaWAN integration execution with sending MQTT device messages."""
 
 import time
 import logging

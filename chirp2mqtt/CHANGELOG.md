@@ -1,5 +1,9 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 1.1.143
+
+- synchronized code with https://github.com/modrisb/chirp
+
 ## 1.1.142
 
 - Fixed issue with enabled_by_default processing

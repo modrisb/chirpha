@@ -1,6 +1,6 @@
-"""The Chirpstack LoRaWan integration - setup."""
+"""The Chirpstack LoRaWAN integration - setup."""
 from __future__ import annotations
-__version__ = "1.1.50"
+__version__ = "1.1.51"
 
 import logging
 import logging.handlers
@@ -17,6 +17,7 @@ from .grpc import ChirpGrpc
 from .mqtt import ChirpToHA
 from .const import CONF_API_SERVER, CONF_API_PORT, CONF_MQTT_SERVER, CONF_MQTT_PORT, CONF_OPTIONS_LOG_LEVEL
 from .const import CONF_APPLICATION_ID, DEFAULT_API_SERVER, DEFAULT_API_PORT, DEFAULT_MQTT_PORT, DEFAULT_MQTT_SERVER
+from .const import CONF_MQTT_CHIRPSTACK_PREFIX, DEFAULT_MQTT_CHIRPSTACK_PREFIX
 
 # https://stackoverflow.com/questions/2183233/how-to-add-a-custom-loglevel-to-pythons-logging-facility/13638084#13638084
 DETAILED_LEVEL_NUM = 5
@@ -43,6 +44,7 @@ INTERNAL_CONFIG = {
   CONF_API_PORT: DEFAULT_API_PORT,
   CONF_MQTT_SERVER: DEFAULT_MQTT_SERVER,
   CONF_MQTT_PORT: DEFAULT_MQTT_PORT,
+  CONF_MQTT_CHIRPSTACK_PREFIX: DEFAULT_MQTT_CHIRPSTACK_PREFIX,
 }
 
 class run_chirp_ha:

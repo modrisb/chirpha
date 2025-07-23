@@ -1,4 +1,4 @@
-"""Test the Wan integration gRPC interface class."""
+"""Test the ChirpStack LoRaWAN integration gRPC interface class."""
 
 from tests import common
 

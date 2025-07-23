@@ -1,4 +1,4 @@
-"""The Chirpstack LoRaWan integration - mqtt interface."""
+"""The ChirpStack LoRaWAN Integration - mqtt interface."""
 from __future__ import annotations
 
 import datetime
@@ -26,6 +26,7 @@ from .const import (
     CONF_MQTT_PWD,
     CONF_MQTT_SERVER,
     CONF_MQTT_USER,
+    CONF_MQTT_CHIRPSTACK_PREFIX,
     CONF_OPTIONS_RESTORE_AGE,
     CONF_OPTIONS_START_DELAY,
     CONNECTIVITY_DEVICE_CLASS,
@@ -67,6 +68,7 @@ def generate_unique_id(configuration):
                 CONF_MQTT_SERVER,
                 CONF_MQTT_PORT,
                 CONF_MQTT_DISC,
+                CONF_MQTT_CHIRPSTACK_PREFIX,
             )
         ]
     )
@@ -87,7 +89,7 @@ def convert_ret_val(ret_val):
             return ""
 
 class ChirpToHA:
-    """Chirpstack LoRaWan MQTT interface."""
+    """ChirpStack LoRaWAN MQTT interface."""
 
     def __init__(
         self, config, version, classes, grpc_client: ChirpGrpc, connectivity_check_only=False
@@ -107,6 +109,10 @@ class ChirpToHA:
         self._dev_count = 0
         self._last_update = None
         self._discovery_prefix = self._config.get(CONF_MQTT_DISC)
+        self._chirpstack_prefix = self._config.get(CONF_MQTT_CHIRPSTACK_PREFIX)
+        if self._chirpstack_prefix and not self._chirpstack_prefix.endswith("/"):
+            self._chirpstack_prefix += "/"
+
         self._client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 
         self._client.on_connect = self.on_connect
@@ -139,14 +145,14 @@ class ChirpToHA:
         self._values_cache = {}
         self._config_topics_published = 0
         self._bridge_config_topics_published = -1
-        self._initialize_topic = f"application/{self._application_id}/status"
-        self._bridge_state_topic = f"application/{self._application_id}/bridge/status"
-        self._bridge_live_topic = f"application/{self._application_id}/bridge/live"
+        self._initialize_topic = f"{self._chirpstack_prefix}application/{self._application_id}/status"
+        self._bridge_state_topic = f"{self._chirpstack_prefix}application/{self._application_id}/bridge/status"
+        self._bridge_live_topic = f"{self._chirpstack_prefix}application/{self._application_id}/bridge/live"
         self._bridge_restart_topic = (
-            f"application/{self._application_id}/bridge/restart"
+            f"{self._chirpstack_prefix}application/{self._application_id}/bridge/restart"
         )
         self._ha_status = f"{self._discovery_prefix}/status"
-        self._sub_cur_topic = f"application/{self._application_id}/device/+/event/cur"
+        self._sub_cur_topic = f"{self._chirpstack_prefix}application/{self._application_id}/device/+/event/cur"
         _LOGGER.info(
             "Connected to MQTT at %s:%s as %s",
             self._config.get(CONF_MQTT_SERVER),
@@ -555,7 +561,7 @@ class ChirpToHA:
                 self.subscribe(self._bridge_state_topic)
                 self.subscribe(self._bridge_restart_topic)
                 self.subscribe(
-                    f"application/{self._application_id}/device/+/event/up"
+                    f"{self._chirpstack_prefix}application/{self._application_id}/device/+/event/up"
                 )
                 self.subscribe(f"{self._discovery_prefix}/+/+/+/config")
                 self.start_bridge()
@@ -565,20 +571,23 @@ class ChirpToHA:
             payload_struct = json.loads(payload) if len(payload) > 2 else None
             if payload_struct:
                 time_stamp = payload_struct.get("time_stamp")
+                _LOGGER.detail(f"Processing message with time stamp {time_stamp} for topic {message.topic} and payload {payload_struct}")
+
                 if subtopics[-1] == "config":
-                    if (
-                        "via_device" in payload_struct["device"]
-                        and payload_struct["device"]["via_device"]
-                        == self._bridge_indentifier
-                    ):
-                        _LOGGER.info(f"Registration message with time stamp {time_stamp} received for device {subtopics[2]} sensor {subtopics[1]}")
-                        self._old_devices_config_topics.add(message.topic)
+                    if payload_struct.get("device"):
                         if (
-                            time_stamp and float(time_stamp) >= self._bridge_init_time
+                            "via_device" in payload_struct["device"]
+                            and payload_struct["device"]["via_device"]
+                            == self._bridge_indentifier
                         ):
-                            self._config_topics_published += 1
-                    else:
-                        self._bridge_config_topics_published -= 1
+                            _LOGGER.info(f"Registration message with time stamp {time_stamp} received for device {subtopics[2]} sensor {subtopics[1]}")
+                            self._old_devices_config_topics.add(message.topic)
+                            if (
+                                time_stamp and float(time_stamp) >= self._bridge_init_time
+                            ):
+                                self._config_topics_published += 1
+                        else:
+                            self._bridge_config_topics_published -= 1
                 elif subtopics[-1] == "cur":
                     dev_eui = subtopics[-3]
                     _LOGGER.info("Cached values received for device %s", dev_eui)
@@ -751,7 +760,7 @@ class ChirpToHA:
         if self._per_device_online:
             availability_elements = self._availability_element.copy()
             for availability_element in availability_elements:
-                availability_element["topic"] = f"application/{self._application_id}/device/{dev_conf['dev_eui']}/event/cur"
+                availability_element["topic"] = f"{self._chirpstack_prefix}application/{self._application_id}/device/{dev_conf['dev_eui']}/event/cur"
             return availability_elements
         else:
             return self._availability_element
@@ -759,8 +768,8 @@ class ChirpToHA:
     def get_conf_data(self, dev_id, sensor, device, dev_conf):
         """Prepare discovery payload."""
         discovery_topic = self.get_discovery_topic(dev_id, sensor, device, dev_conf)
-        status_topic = f"application/{self._application_id}/device/{dev_conf['dev_eui']}/event/{sensor.get('data_event') if sensor.get('data_event') else 'up'}"
-        comand_topic = f"application/{self._application_id}/device/{dev_conf['dev_eui']}/command/down"
+        status_topic = f"{self._chirpstack_prefix}application/{self._application_id}/device/{dev_conf['dev_eui']}/event/{sensor.get('data_event') if sensor.get('data_event') else 'up'}"
+        comand_topic = f"{self._chirpstack_prefix}application/{self._application_id}/device/{dev_conf['dev_eui']}/command/down"
         discovery_config = sensor["entity_conf"].copy()
         discovery_config["device"] = device.copy()
         for key in list(discovery_config["device"]):

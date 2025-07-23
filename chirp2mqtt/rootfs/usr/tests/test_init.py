@@ -1,4 +1,4 @@
-"""Test the ChirpStack LoRaWan integration initilization path initiated from start.py."""
+"""Test the ChirpStack LoRaWAN integration initilization path initiated from start.py."""
 import logging
 import time
 from tests import common
