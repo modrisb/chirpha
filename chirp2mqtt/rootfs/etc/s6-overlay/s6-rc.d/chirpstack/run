@@ -105,7 +105,7 @@ if ! [ -f "$INITIALIZED" ]; then
     fi
 fi
 
-# import LoraWan device templates if repository found on HA /share
+# import LoRaWAN device templates if repository found on HA /share
 if [ -f "$EXTPATH/$DEVICES" ]; then
     if ! [ -f "$IMPORTED" ]; then
         chirpstack -c /etc/chirpstack import-legacy-lorawan-devices-repository -d "$EXTPATH/$DEVICES" >/dev/null
@@ -115,10 +115,10 @@ if [ -f "$EXTPATH/$DEVICES" ]; then
     fi
 fi
 
-# import LoraWan device templates from configured git repository - download and import
+# import LoRaWAN device templates from configured git repository - download and import
 IMPORT_ACTION=$(jq --raw-output '.import_actions // empty' $CONFILE)
 if ! [ "$IMPORT_ACTION" = "none" ]; then
-    echo Importing LoraWan devices from: $IMPORT_ACTION
+    echo Importing LoRaWAN devices from: $IMPORT_ACTION
     if [ -d "/data/temp" ]; then
         rm -r /data/temp
     fi

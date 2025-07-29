@@ -1,22 +1,23 @@
 # https://developers.home-assistant.io/docs/add-ons/configuration#add-on-config
 name: Chirp2MQTT
-version: "1.1.143"
+version: "1.1.144"
 slug: chirp2mqtt
-description: HA add-on to incorporatex ChirpStack LoraWan devices into MQTT integration
+description: HA add-on to incorporate ChirpStack LoRaWAN devices into MQTT integration
 arch:
   - armhf
   - armv7
   - aarch64
   - amd64
+ingress: true
 url: "https://github.com/modrisb/chirpha"
 startup: application
-webui: http://[HOST]:[PORT:8080]
+webui: http://[HOST]:[PORT:8099]
 boot: auto
 ports:
-  8080/tcp: 8080
+  8099/tcp: 8099
   1700/udp: 1700
 ports_description:
-  8080/tcp: "ChirpStack server WEB UI port"
+  8099/tcp: "ChirpStack server WEB UI port"
   1700/udp: "Port to receive LoraWAN packets"
 homeassistant: "2024.3.1"
 map:

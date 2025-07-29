@@ -1,8 +1,12 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 1.1.144
+
+- Ingress support added
+
 ## 1.1.143
 
-- synchronized code with https://github.com/modrisb/chirp
+- Synchronized code with https://github.com/modrisb/chirp
 - Upgrade to ghcr.io/hassio-addons/base:18.0.3, CHIRPSTACK_VERSION: 4.13.0
 
 ## 1.1.142

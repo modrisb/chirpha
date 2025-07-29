@@ -1,4 +1,4 @@
 # https://developers.home-assistant.io/docs/add-ons/repository#repository-configuration
-name: ChirpStack LoraWan - Home Assistant integration add-on repository
+name: ChirpStack LoRaWAN - Home Assistant integration add-on repository
 url: 'https://github.com/modrisb/chirpha'
 maintainer: MB <modrisb@apollo.lv>

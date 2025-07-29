@@ -18,6 +18,12 @@ RUN \
     apk --no-cache add python3 \
     && apk --no-cache add py3-pip \
     && pip3 install chirpstack-api paho-mqtt dukpy --break-system-packages \
+    && apk --no-cache add nodejs npm \
+    && npm install -g express \
+    && npm install -g http-proxy-middleware \
+    && sed -i 's/extend(/Object.assign(/g' /usr/local/lib/node_modules/http-proxy-middleware/node_modules/http-proxy/lib/http-proxy/index.js \
+    && sed -i 's/extend(/Object.assign(/g' /usr/local/lib/node_modules/http-proxy-middleware/node_modules/http-proxy/lib/http-proxy/common.js \
+    && npm install -g ipaddr.js \
     && apk --no-cache add git redis postgresql16 postgresql16-contrib su-exec \
     && sed -i 's/protected-mode yes/protected-mode no/' /etc/redis.conf \
     && sed -i 's/^\(bind .*\)$/# \1/' /etc/redis.conf \

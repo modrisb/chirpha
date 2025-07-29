@@ -6,7 +6,7 @@ configuration:
   application_id:
     name: Application ID
     description: >-
-      Tenant's application ID to group LoraWAN devices for integration
+      Tenant's application ID to group LoRaWAN devices for integration
   mqtt_user:
     name: MQTT user name
     description: >-
@@ -44,17 +44,17 @@ configuration:
     description: >-
       Request ChirpStack database backup and/or restore to HA /share/chirp2mqtt folder
   import_actions:
-    name: Import LoraWAN device templates from git repository
+    name: Import LoRaWAN device templates from git repository
     description: >-
-      Import LoraWAN device templates from git repository into ChirpStack database
+      Import LoRaWAN device templates from git repository into ChirpStack database
   lora_region:
     name: Select Lora region
     description: >-
-      Select Lora region to use for ChirpStack LoraWan device communication
+      Select Lora region to use for ChirpStack LoRaWAN device communication
   chirpstack_secret:
     name: ChirpStack secret
     description: >-
       String used by ChirpStack to generate login and API tokens
 network:
   8080/tcp: ChirpStack server WEB UI port
-  1700/udp: Port to receive LoraWAN packets
+  1700/udp: Port to receive LoRaWAN packets

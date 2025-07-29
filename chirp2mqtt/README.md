@@ -1,6 +1,6 @@
 # Home Assistant Add-on: ChirpStack add-on
 
-_Add-on to integrate ChirpStack LoraWAN server with HA via MQTT._
+_Add-on to integrate ChirpStack LoRaWAN server with HA via MQTT._
 
 ![Supports aarch64 Architecture][aarch64-shield]
 ![Supports amd64 Architecture][amd64-shield]

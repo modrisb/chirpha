@@ -11,12 +11,12 @@ Follow these steps to get the add-on installed on your system:
 
 ## How to use
 
-Chirp2MQTT middleware add-on integrates ChirpStack server, Redis, PostgreSQL and small Python management component into single unit that could be installed on Home Assistant managed system with Mosquitto MQTT broker available at IP address core-mosquitto. Add-on allows to integrate LoraWAN devices into HA system via MQTT integration. Python management component registers all known and enabled in ChirpStack LoraWAN devices within MQTT, handles battery level set-up at service start, restores known sensor values and synchronize device list upon request. Device registration is handled via ChirpStack WWW interface and this may include updates in device Codec javascript code.
+Chirp2MQTT middleware add-on integrates ChirpStack server, Redis, PostgreSQL and small Python management component into single unit that could be installed on Home Assistant managed system with Mosquitto MQTT broker available at IP address core-mosquitto. Add-on allows to integrate LoRaWAN devices into HA system via MQTT integration. Python management component registers all known and enabled in ChirpStack LoRaWAN devices within MQTT, handles battery level set-up at service start, restores known sensor values and synchronize device list upon request. Device registration is handled via ChirpStack WWW interface and this may include updates in device Codec javascript code.
 Before add-on is installed you need to create Mosquitto MQTT broker user/password (remember that `homeassistant` or `addons` user names are reserved) with authority to subscribe/publish any topic. Recent version uses plain MQTT connection without any certificates on default port 1883.
 
 The add-on need to be configured before started, see **Configuration** section for details. Start add-on, initial start-up requires more time that successive startups. There is option to restore ChirpStack PostgreSQL database from backup file in HA /share/chirp2mqtt/chirp_db, on success backup file is renamed to chirp_db.restored .
 
-"Chirp2MQTT Bridge" device should show up as parent for all other LoraWAN devices managed by ChirpStack server. Bridge device exposes 'Reload devices' control to synchronize device list with server. Child devices are listed under "Connected devices". Child names are retrieved from ChirpStack server and must be managed from here. Integration uses LoRa deveui to identify device internally.
+"Chirp2MQTT Bridge" device should show up as parent for all other LoRaWAN devices managed by ChirpStack server. Bridge device exposes 'Reload devices' control to synchronize device list with server. Child devices are listed under "Connected devices". Child names are retrieved from ChirpStack server and must be managed from here. Integration uses LoRa deveui to identify device internally.
 
 Add-on on start-up searches for specific configuration files in HA directories /share/chirp2mqtt/etc/chirpstack and /share/chirp2mqtt/etc/chirpstack-gateway-bridge and replaces default configuration files with those customized. Default ChirpStack configuration files assumes on Semtech interface on port 1700.
 Python management component ensures that ChirpStack have at least 1 tenant and 1 application in its database by creating missing objects.
@@ -98,7 +98,7 @@ Default value: 'None' .
 
 ### Option: `import_actions`
 
-URL to git repository with LoraWAN device templates or 'none'. Repository is imported before ChirsStack starts. Parameter must be reset after importing to 'none', otherwise import will be started again on next add-on start-up. Chirp2MQTT automatically imports repository from HA directory /share/chirp2mqtt/lorawan-devices and marks import by creating file 'imported' to prevent continuous imports.
+URL to git repository with LoRaWAN device templates or 'none'. Repository is imported before ChirsStack starts. Parameter must be reset after importing to 'none', otherwise import will be started again on next add-on start-up. Chirp2MQTT automatically imports repository from HA directory /share/chirp2mqtt/lorawan-devices and marks import by creating file 'imported' to prevent continuous imports.
 
 Default(initial) value: 'https://github.com/brocaar/lorawan-devices' .
 
