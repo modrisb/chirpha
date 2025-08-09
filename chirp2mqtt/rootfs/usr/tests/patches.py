@@ -158,7 +158,27 @@ CODEC = [   # array of (no_of_sensors, "codec_code")
         1,  #
         'function getHaDeviceInfo() {return {device: {manufacturer: "vendor0",model: "model1",},entities: {counter:{entity_conf: {value_template: "{{ value_json.object.counter }}",device_class: "gas001",state_class: "total_increasing",unit_of_measurement: "m³", enabled_by_default:false}},}};}',
     ),
-
+    (   #23
+        6,
+        "\
+        function getHaDeviceInfo() {\
+        return {\
+            device: {\
+            manufacturer: 'M0',\
+            model: 'zeroentityvalues'\
+            },\
+            entities: {\
+            s0: {entity_conf: {value_template: '{{ value_json.object.s0 }}' }},\
+            s1: {entity_conf: {value_template: '{{ value_json.object.s1 }}' }},\
+            l0: {entity_conf: {value_template: '{{ value_json.object.l0 }}' }},\
+            l1: {entity_conf: {value_template: '{{ value_json.object.l1 }}' }},\
+            i0: {entity_conf: {value_template: '{{ value_json.object.i0 }}' }},\
+            i1: {entity_conf: {value_template: '{{ value_json.object.i1 }}' }},\
+            }\
+        };\
+        }\
+        ",
+    ),
 ]
 
 
@@ -595,21 +615,41 @@ class api:
                 ]
             request.device_profile.name = f"profile_name{dev_no}"
             request.device_profile.mac_version = 0
-            measurement = lambda: None
-            measurement.name = "counter"
-            request.device_profile.measurements["counter"] = measurement
-            measurement = lambda: None
-            measurement.name = "battery"
-            request.device_profile.measurements["battery"] = measurement
-            measurement = lambda: None
-            measurement.name = "rssi"
-            request.device_profile.measurements["rssi"] = measurement
-            measurement = lambda: None
-            measurement.name = "state"
-            request.device_profile.measurements["state"] = measurement
-            measurement = lambda: None
-            measurement.name = "altitude"
-            request.device_profile.measurements["altitude"] = measurement
+            if 'zeroentityvalues' in request.device_profile.payload_codec_script:
+                measurement = lambda: None
+                measurement.name = "s0"
+                request.device_profile.measurements["s0"] = measurement
+                measurement = lambda: None
+                measurement.name = "s1"
+                request.device_profile.measurements["s1"] = measurement
+                measurement = lambda: None
+                measurement.name = "l0"
+                request.device_profile.measurements["l0"] = measurement
+                measurement = lambda: None
+                measurement.name = "l1"
+                request.device_profile.measurements["l1"] = measurement
+                measurement = lambda: None
+                measurement.name = "i0"
+                request.device_profile.measurements["i0"] = measurement
+                measurement = lambda: None
+                measurement.name = "i1"
+                request.device_profile.measurements["i1"] = measurement
+            else:
+                measurement = lambda: None
+                measurement.name = "counter"
+                request.device_profile.measurements["counter"] = measurement
+                measurement = lambda: None
+                measurement.name = "battery"
+                request.device_profile.measurements["battery"] = measurement
+                measurement = lambda: None
+                measurement.name = "rssi"
+                request.device_profile.measurements["rssi"] = measurement
+                measurement = lambda: None
+                measurement.name = "state"
+                request.device_profile.measurements["state"] = measurement
+                measurement = lambda: None
+                measurement.name = "altitude"
+                request.device_profile.measurements["altitude"] = measurement
             request.device_profile.DESCRIPTOR = lambda: None
             request.device_profile.DESCRIPTOR.fields_by_name = {}
             mac_version = lambda: None

@@ -708,19 +708,19 @@ class ChirpToHA:
             for level_filter in levels_filter[0]:
                 message_o_r = message_o[0].get(level_filter) if message_o else None
                 message_n_r = message_n[0].get(level_filter) if message_n else None
-                if not message_o_r and not message_n_r:
+                if message_o_r==None and message_n_r==None:
                     continue
                 filtered[0][level_filter] = self.join_filtered_messages(
                     message_o_r, message_n_r, levels_filter[0].get(level_filter)
                 )
         elif levels_filter == {}:
-            filtered = message_n if message_n else message_o
+            filtered = message_n if message_n!=None else message_o
         else:
             filtered = {}
             for level_filter in levels_filter:
                 message_o_r = message_o.get(level_filter) if message_o else None
                 message_n_r = message_n.get(level_filter) if message_n else None
-                if not message_o_r and not message_n_r:
+                if message_o_r==None and message_n_r==None:
                     continue
                 filtered[level_filter] = self.join_filtered_messages(
                     message_o_r, message_n_r, levels_filter.get(level_filter)
