@@ -11,10 +11,11 @@ const express = require('/usr/local/lib/node_modules/express');
 const { createProxyMiddleware } = require('/usr/local/lib/node_modules/http-proxy-middleware');
 const ipaddr = require('/usr/local/lib/node_modules/ipaddr.js');
 const HM_HAPROXY_SRC="172.30.32.2/32";
+const TARGET_BACKEND = 'http://127.0.0.1:8080';
 
-const apiProxy = createProxyMiddleware({
+const nonGrpcProxy = createProxyMiddleware({
   pathFilter:'/',
-  target: 'http://127.0.0.1:8080',
+  target: TARGET_BACKEND,
   changeOrigin: true,
   selfHandleResponse: true,
   on: {
@@ -47,7 +48,6 @@ const apiProxy = createProxyMiddleware({
               (
                 proxyRes.headers['content-type'].includes('text/') ||
                 proxyRes.headers['content-type'].includes('application/javascript') ||
-                proxyRes.headers['content-type'].includes('application/grpc-web-text') ||
                 proxyRes.headers['content-type'].includes('application/json')
               )
               ) {
@@ -78,6 +78,30 @@ const apiProxy = createProxyMiddleware({
   },
 });
 
+function nonGrpcProxyHandler(req, res, next) {
+  if(req.headers['content-type'] && (req.headers['content-type'].includes('application/grpc-web-text') || req.headers['content-type'].includes('application/grpc-web-text+proto'))) {
+    next();
+  } else {
+    return nonGrpcProxy(req, res, next);
+  }
+}
+
+const grpcProxy = createProxyMiddleware({
+  target: TARGET_BACKEND,   // gRPC-Web capable backend
+  changeOrigin: true,
+  ws: false,
+  selfHandleResponse: false,
+  on: {
+    ProxyReq: (proxyReq) => {
+      proxyReq.removeHeader('accept-encoding'); // disable gzip, break streaming otherwise
+    }
+  }
+});
+
+function grpcProxyHandler(req, res, next) {
+  return grpcProxy(req, res, next);
+}
+
 const app = express();
 app.use((req, res, next) => {
   //Get whitelisted range
@@ -92,5 +116,5 @@ app.use((req, res, next) => {
     // abort request with "403 Forbidden"
     res.status(403).end();
   }
-}, apiProxy);
+}, nonGrpcProxyHandler, grpcProxyHandler);
 app.listen(8099);

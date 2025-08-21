@@ -1,5 +1,9 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 1.1.147
+
+- Fixed issue with event/frame appearance in ingress
+
 ## 1.1.146
 
 - Fixed value processing for cases when not(value)==True
