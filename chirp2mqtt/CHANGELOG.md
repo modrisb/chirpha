@@ -1,5 +1,9 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 1.1.148
+
+- Upgrade to ghcr.io/hassio-addons/base:18.1.1, CHIRPSTACK_VERSION: 4.14.1
+
 ## 1.1.147
 
 - Fixed issue with event/frame appearance in ingress

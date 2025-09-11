@@ -63,7 +63,7 @@ const nonGrpcProxy = createProxyMiddleware({
               body = body.replaceAll('this.hostname_+"/api.',
                 'this.hostname_+"'+req.headers['x-ingress-path']+'/api.');
             }
-          
+
             if(proxyRes.headers['transfer-encoding'] == 'chunked') {
               res.end(new Buffer.from(body));
             } else {
@@ -79,7 +79,7 @@ const nonGrpcProxy = createProxyMiddleware({
 });
 
 function nonGrpcProxyHandler(req, res, next) {
-  if(req.headers['content-type'] && (req.headers['content-type'].includes('application/grpc-web-text') || req.headers['content-type'].includes('application/grpc-web-text+proto'))) {
+  if(req.headers['content-type'] && req.headers['content-type'].toLowerCase().startsWith('application/grpc-web')) {
     next();
   } else {
     return nonGrpcProxy(req, res, next);
@@ -103,6 +103,7 @@ function grpcProxyHandler(req, res, next) {
 }
 
 const app = express();
+
 app.use((req, res, next) => {
   //Get whitelisted range
   let whitelisted_range = ipaddr.parseCIDR(HM_HAPROXY_SRC);
@@ -117,4 +118,5 @@ app.use((req, res, next) => {
     res.status(403).end();
   }
 }, nonGrpcProxyHandler, grpcProxyHandler);
+
 app.listen(8099);
