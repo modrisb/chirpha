@@ -662,11 +662,21 @@ class api:
             ] = mac_version
             return request
 
+        def Update(self, deviceProfileReq, metadata):
+            """Get response object for device profile update request."""
+            request = lambda: None
+            return request
+
     def GetDeviceProfileRequest():
         """Prepare device profile request object, only properties needd for test created."""
         request = lambda: None
         request.id = None
         request.limit = None
+        return request
+
+    def UpdateDeviceProfileRequest():
+        """Prepare device profile update request object, only properties needd for test created."""
+        request = lambda: None
         return request
 
     class InternalServiceStub(object):
