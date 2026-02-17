@@ -1,5 +1,11 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 1.1.149
+
+- Upgrade to ghcr.io/hassio-addons/base:20.0.1, CHIRPSTACK_VERSION: 4.16.1, CHIRPSTACK_GATEWAY_BRIDGE_VERSION: 4.1.1
+- Added auto generation for HA integration function getHaDeviceInfo with minimal configuration if it is absent in device profile javascript codec
+- Replaced depricated object_id with default_entity_id in entity configuration
+
 ## 1.1.148
 
 - Upgrade to ghcr.io/hassio-addons/base:18.1.1, CHIRPSTACK_VERSION: 4.14.1
