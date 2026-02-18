@@ -57,16 +57,9 @@ if ! [ -f "$INITIALIZED" ]; then
     su-exec postgres psql -c "drop database if exists chirpstack;"
     su-exec postgres psql -c "drop role if exists chirpstack;"
     su-exec postgres psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --no-password --no-psqlrc -f /etc/postgres_chirp.sql
-    if [ -d "/data/temp" ]; then
-        rm -r /data/temp
-    fi
-    mkdir /data/temp
-    git clone https://github.com/brocaar/lorawan-devices /data/temp/lorawan-devices >/dev/null 2>/dev/null
-    chirpstack -c /etc/chirpstack import-legacy-lorawan-devices-repository -d /data/temp/lorawan-devices >/dev/null
     if [[ $? -eq 0 ]]; then
         touch $INITIALIZED
     fi
-    rm -r /data/temp
 fi
 
 for portotest in ":6379" ":5432"

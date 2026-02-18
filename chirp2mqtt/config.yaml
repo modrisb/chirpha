@@ -17,7 +17,7 @@ ports:
   1700/udp: 1700
 ports_description:
   1700/udp: "Port to receive LoraWAN packets"
-homeassistant: "2024.3.1"
+homeassistant: "2025.10.1"
 map:
   - homeassistant_config
   - addon_config
