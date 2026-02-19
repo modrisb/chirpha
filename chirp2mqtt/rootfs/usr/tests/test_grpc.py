@@ -5,7 +5,7 @@ import logging
 from unittest import mock
 
 from .patches import get_size, mqtt, set_size, dukpy
-from chirpha.const import ERRMSG_CODEC_ERROR, ERRMSG_DEVICE_IGNORED
+from chirpha.const import ERRMSG_CODEC_ERROR, ERRMSG_DEVICE_IGNORED, WARMSG_DISC_AUTO
 
 def test_faulty_codec(caplog):
     """Test faulty codec - devices are not installed."""
@@ -48,7 +48,7 @@ def test_codec_prologue_issues(caplog):
     """Test codec with issues in prologue, no devices to be installed."""
 
     def run_test_codec_prologue_issues(config):
-        common.check_for_no_registration(config)
+        mqtt.Client(mqtt.CallbackAPIVersion.VERSION2).get_published(keep_history=False)
         set_size(devices=1, codec=12)  # return statement missing
         common.reload_devices(config)
         assert get_size("idevices") == mqtt.Client(mqtt.CallbackAPIVersion.VERSION2).stat_devices  ### device count check
@@ -66,7 +66,7 @@ def test_codec_prologue_issues(caplog):
     for record in caplog.records:
         if record.msg == ERRMSG_CODEC_ERROR: i_sensor_err1 += 1
         if record.msg == ERRMSG_DEVICE_IGNORED: i_sensor_err2 += 1
-    assert i_sensor_err1 == 2 and i_sensor_err2 == 3
+    assert i_sensor_err1 == 2 and i_sensor_err2 == 2
 
 def test_codec_with_comment(caplog):
     """Test codec with comments in body."""
@@ -85,3 +85,12 @@ def test_codec_with_comment(caplog):
     for record in caplog.records:
         if record.msg == ERRMSG_CODEC_ERROR: i_sensor_err += 1
     assert i_sensor_err == 1
+
+def test_no_getHaDeviceInfo(caplog):
+    """Test if no getHaDeviceInfo defined and default code is used."""
+
+    common.chirp_setup_and_run_test(caplog, None, test_params=dict(devices=1, codec=24), allowed_msg_level=logging.WARNING)
+    i_sensor_warn = 0
+    for record in caplog.records:
+        if record.msg == WARMSG_DISC_AUTO: i_sensor_warn += 1
+    assert i_sensor_warn == 1

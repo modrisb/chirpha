@@ -1,5 +1,10 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 1.1.150
+
+- default_entity_id naming fix - added leading integration
+- fixed auto generation for HA integration function getHaDeviceInfo and corresponding test cases
+
 ## 1.1.149
 
 - Upgrade to ghcr.io/hassio-addons/base:20.0.1, CHIRPSTACK_VERSION: 4.16.1, CHIRPSTACK_GATEWAY_BRIDGE_VERSION: 4.1.1

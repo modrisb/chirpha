@@ -66,7 +66,7 @@ CODEC = [   # array of (no_of_sensors, "codec_code")
         1,
         'function getHaDeviceInfo() {return {device: {manufacturer: "vendor0",model: "model1",},entities: {counter:{entity_conf: {value_template: "{{ value_json.object.counter }}",device_class: "gas",state_class: "total_increasing",command_topic:"{command_topic}",unit_of_measurement: "m³"}},}};}',
     ),
-    (0, 'function getHaDeviceInf() {return {device:,""}}'), #11
+    (0, 'function getHaDeviceInf() {return {device:""}}'), #11
     (0, 'function getHaDeviceInfo() {retur {device:,""}}'), #12
     (0, "function getHaDeviceInfo() {return "),             #13
     (   #14
@@ -177,6 +177,11 @@ CODEC = [   # array of (no_of_sensors, "codec_code")
             }\
         };\
         }\
+        ",
+    ),
+    (   #24
+        2,
+        "\
         ",
     ),
 ]
@@ -614,6 +619,7 @@ class api:
                     1
                 ]
             request.device_profile.name = f"profile_name{dev_no}"
+            request.device_profile.description = "Man_"+request.device_profile.name
             request.device_profile.mac_version = 0
             if 'zeroentityvalues' in request.device_profile.payload_codec_script:
                 measurement = lambda: None
@@ -641,6 +647,9 @@ class api:
                 measurement = lambda: None
                 measurement.name = "battery"
                 request.device_profile.measurements["battery"] = measurement
+                measurement = lambda: None
+                measurement.name = "battery_voltage"
+                request.device_profile.measurements["battery_voltage"] = measurement
                 measurement = lambda: None
                 measurement.name = "rssi"
                 request.device_profile.measurements["rssi"] = measurement
@@ -674,7 +683,7 @@ class api:
         request.limit = None
         return request
 
-    def UpdateDeviceProfileRequest():
+    def UpdateDeviceProfileRequest(device_profile):
         """Prepare device profile update request object, only properties needd for test created."""
         request = lambda: None
         return request

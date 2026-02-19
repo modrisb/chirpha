@@ -55,3 +55,4 @@ ERRMSG_CODEC_ERROR = "Profile %s discovery codec script error '%s', source code 
 ERRMSG_DEVICE_IGNORED = "Discovery codec (%s->%s) missing or faulty for device %s with profile %s, device ignored"
 WARMSG_APPID_WRONG = "'%s' is not valid application ID, using '%s' (tenant '%s', application '%s')"
 WARMSG_DEVCLS_REMOVED = "Could not detect integration by device class %s for device %s, integration set to 'sensor', device class removed"
+WARMSG_DISC_AUTO = "Profile %s discovery codec script not found, generating one, will use manufacturer name '%s', device name '%s', baterry '%s'"
